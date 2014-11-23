@@ -10,6 +10,12 @@ project(':testbench'){
 
     mainClassName = 'com.frank0631.monolithic.Testbench'
 
+    tasks.withType(JavaExec) {
+        systemProperty "java.library.path", "libs/linux-x86-64"
+        systemProperty "jna.platform.library.path", "libs/linux-x86-64"
+        environment 'TESSDATA_PREFIX', 'src/main/resources'
+    }
+
     repositories {
         mavenCentral()
     }
