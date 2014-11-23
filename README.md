@@ -1,4 +1,4 @@
-walk-around-SwipeToSpin
+monolithic-cv
 =======================
 
-computer vision algorithms for SwipeToSpin
+computer vision algorithms dump
