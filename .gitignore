@@ -1,0 +1,24 @@
+# Default 
+.gradle
+gradle
+/local.properties
+build
+
+# Idea, User Specific
+.idea
+out
+
+# Idea, File-based project format
+*.ipr
+*.iml
+*.iws
+
+# Idea, File-based project format
+*.ipr
+*.iml
+*.iws
+*.log
+
+.DS_Store
+.idea/libraries
+nohup.out

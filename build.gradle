@@ -1,0 +1,23 @@
+allprojects {
+    version = '1.0'
+    group = ''
+    apply plugin: 'idea'
+}
+
+project(':testbench'){
+    apply plugin: 'java'
+    apply plugin: 'application'
+
+    mainClassName = 'com.frank0631.monolithic.Testbench'
+
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        compile 'nu.pattern:opencv:2.4.9-7'
+        compile 'com.n3twork.druid:alphanum:1.0.3'
+        compile files("libs/remon_pcl.jar")
+        testCompile group: 'junit', name: 'junit', version: '4.11'
+
+    }
+}
