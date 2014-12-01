@@ -1,5 +1,6 @@
 package com.frank0631.monolithic;
 
+import org.opencv.calib3d.StereoSGBM;
 import org.opencv.core.Mat;
 import org.opencv.highgui.Highgui;
 import remon_pcl.pcl.*;
@@ -11,9 +12,19 @@ import remon_pcl.pcl.search.KdTree_PointXYZ;
 public class Testbench {
 
     public static void main(String[] args){
-        System.out.println("Hello,OpenCV");
+
         nu.pattern.OpenCV.loadShared();
         System.loadLibrary("opencv_java249");
+        System.loadLibrary("PCL_Wrapper");
+
+        //cv_test();
+        //pcl_test();
+        stereo_test();
+
+    }
+
+    static void cv_test()
+    {
 
         //display Params
         boolean showEpipole=true;
@@ -21,10 +32,8 @@ public class Testbench {
         boolean showStitch=true;
         boolean displayWindow=false;
 
-
         //Quick 3D Image Pair processing for books and rooms
         Mat roomA = Highgui.imread("resources/room/roomA.jpg");
-        System.out.println("width:"+roomA.width());
         Mat roomB = Highgui.imread("resources/room/roomB.jpg");
         ImagePair3DProcess.Quick3DPairProcess(roomA, roomB, showEpipole, showMatch, showStitch, displayWindow,"roomA vs roomB","results/room");
         ImagePair3DProcess.Quick3DPairProcess(roomB, roomA, showEpipole, showMatch, showStitch, displayWindow,"roomB vs roomA","results/room");//Broken left to right
@@ -32,13 +41,10 @@ public class Testbench {
         Mat Book1 = Highgui.imread("resources/books/book1.jpg");
         Mat Book2 = Highgui.imread("resources/books/book2.jpg");
         Mat Book3 = Highgui.imread("resources/books/book3.jpg");
-        //ImagePair3DProcess.Quick3DPairProcess(Book2, Book1, showEpipole, showMatch, showStitch, displayWindow,"book2v1","results/book");//Broken 1 is blurry
-        //ImagePair3DProcess.Quick3DPairProcess(Book3, Book2, showEpipole, showMatch, showStitch, displayWindow,"book3v2","results/book");
-        //ImagePair3DProcess.Quick3DPairProcess(Book3, Book1, showEpipole, showMatch, showStitch, displayWindow,"book3v1","results/book");//Broken 1 is blurry
+        ImagePair3DProcess.Quick3DPairProcess(Book2, Book1, showEpipole, showMatch, showStitch, displayWindow,"book2v1","results/book");//Broken 1 is blurry
+        ImagePair3DProcess.Quick3DPairProcess(Book3, Book2, showEpipole, showMatch, showStitch, displayWindow,"book3v2","results/book");
+        ImagePair3DProcess.Quick3DPairProcess(Book3, Book1, showEpipole, showMatch, showStitch, displayWindow,"book3v1","results/book");//Broken 1 is blurry
 
-        //Point Cloud Wrapper test
-        System.loadLibrary("PCL_Wrapper");
-        program1_test();
 
         /*//Quick 3D Image Pair processing for joe the bmw
         File joeFolder = new File("training_subset/bmwbayside/4jgda7db8da163624/img");
@@ -62,7 +68,7 @@ public class Testbench {
         }*/
     }
 
-    static void program1_test()
+    static void pcl_test()
     {
         PointCloud_PointXYZ cloud =new PointCloud_PointXYZ();
         //passing points
@@ -87,6 +93,20 @@ public class Testbench {
             System.out.println(N.getNormal_y());
             System.out.println(N.getNormal_z());
         }
+    }
+
+    static void stereo_test()
+    {
+
+        Mat imgL = Highgui.imread("resources/stereo/im0.png");
+        Mat imgR = Highgui.imread("resources/stereo/im1.png");
+        Mat imgD = new Mat(imgL.rows(),imgL.cols(),imgL.type());
+
+        System.out.println("Please wait, computing stereo disparity");
+        StereoSGBM sgbm = new StereoSGBM();
+        sgbm.compute(imgL,imgR,imgD);
+        Highgui.imwrite("results/stereo/disparity.png",imgD);
+        System.out.println("Stereo disparity calculated");
     }
 
 }
